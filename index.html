@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<title>XIV Studio — booking playground</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#101411;color:#f2f1e8;font:17px/1.6 system-ui,sans-serif}main{max-width:1120px;margin:auto;padding:32px 24px}header{display:flex;justify-content:space-between;gap:20px;border-bottom:1px solid #465044;padding-bottom:20px}.brand{font-weight:900;letter-spacing:.2em}.pill{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:#c1e887}h1{font-size:clamp(44px,8vw,88px);line-height:1.03;letter-spacing:-.065em;max-width:850px;margin:70px 0 25px}p{color:#b8c0b4;max-width:630px}.grid{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;margin:48px 0}section,aside{border:1px solid #465044;border-radius:20px;padding:28px;background:#191f19}h2{font-size:24px;margin-top:0}label{display:block;margin:20px 0 6px}select,button{font:inherit;border-radius:10px;padding:13px;width:100%}select{background:#101411;color:#f2f1e8;border:1px solid #63705b}button{background:#c1e887;color:#18210f;border:0;font-weight:750;cursor:pointer;margin-top:22px}button.secondary{background:transparent;color:#c1e887;border:1px solid #63705b}button:focus-visible,select:focus-visible{outline:3px solid #f6c775;outline-offset:4px}.price{font-size:56px;letter-spacing:-.05em;margin:15px 0}small,footer{color:#b8c0b4;font-size:14px}#status{min-height:55px;color:#c1e887}@media(max-width:680px){.grid{grid-template-columns:1fr}header{flex-direction:column}h1{margin-top:45px}}
+</style></head><body><main>
+<header><span class="brand">XIV / STUDIO</span><span class="pill">Interactive playground · fictional data</span></header>
+<h1>Make space<br>for your next idea.</h1>
+<p>Explore a studio session, shape a sample quote, and try the booking flow. This independent concept demo makes no real bookings and takes no payments.</p>
+<div class="grid"><section aria-labelledby="configure"><h2 id="configure">01 / Build your session</h2>
+<label for="service">Your session</label><select id="service"><option value="record">Record — capture your sound</option><option value="create">Create — develop an idea</option><option value="finish">Finish — polish a project</option></select>
+<label for="hours">Session length</label><select id="hours"><option value="2">2 hours</option><option value="4">4 hours</option><option value="6">6 hours</option></select>
+<label for="slot">Illustrative start time</label><select id="slot"><option>10:00</option><option>14:00</option><option>18:00</option></select>
+<p><small>All services, rates and slots are fictional examples. These times do not reflect studio availability.</small></p></section>
+<aside aria-labelledby="summary"><h2 id="summary">02 / Your sample quote</h2><div id="quote" aria-live="polite"></div><button id="simulate" type="button">Simulate booking</button><button id="reset" class="secondary" type="button">Reset playground</button><p id="status" role="status"></p></aside></div>
+<footer>Browser memory only. Reload or reset to start fresh. No account, database, analytics, external assets or API connections.</footer>
+</main><script>
+'use strict';
+const service=document.getElementById('service'),hours=document.getElementById('hours'),slot=document.getElementById('slot'),quote=document.getElementById('quote'),status=document.getElementById('status');
+const rates={record:40,create:50,finish:60};
+const money=new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:0});
+function render(){const total=rates[service.value]*Number(hours.value);quote.replaceChildren();const price=document.createElement('div');price.className='price';price.textContent=money.format(total);const detail=document.createElement('p');detail.textContent=hours.value+' hours · '+slot.value+' · sample 50% deposit '+money.format(total/2);quote.append(price,detail);status.textContent='';}
+[service,hours,slot].forEach(el=>el.addEventListener('change',render));
+document.getElementById('simulate').addEventListener('click',()=>{status.textContent='Simulation complete. Nothing was booked or charged. Change your session to try again.';});
+document.getElementById('reset').addEventListener('click',()=>{service.selectedIndex=0;hours.selectedIndex=0;slot.selectedIndex=0;render();status.textContent='Playground reset.';});render();
+</script></body></html>
